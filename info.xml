@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
-<extension key="be.kava.kavaquicksearch" type="module">
+<extension key="be.kava.quicksearch" type="module">
   <file>kavaquicksearch</file>
-  <name>Quick Search Extension for KAVA</name>
+  <name>KAVA Quick Search Extension</name>
   <description>Extends the default quick search field to support searching within custom fields</description>
   <license>AGPL-3.0</license>
   <maintainer>

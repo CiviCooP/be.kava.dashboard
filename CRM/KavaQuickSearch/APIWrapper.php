@@ -17,20 +17,42 @@ class CRM_KavaQuickSearch_APIWrapper implements API_Wrapper {
 
   public function fromApiInput($apiRequest) {
 
-    if($apiRequest['entity'] != 'Contact' || $apiRequest['action'] != 'getquick' || !is_array($apiRequest['params'])) {
+    if ($apiRequest['entity'] != 'Contact' || $apiRequest['action'] != 'getquick' || !is_array($apiRequest['params']) || empty($apiRequest['params']['name'])) {
       return $apiRequest;
     }
 
-    // TODO HANDLE ACTUAL SEARCH
+    if (in_array($apiRequest['params']['field_name'], ['kava_custom_apb', 'kava_custom_barcode'])) {
+      $cf = CRM_KavaGeneric_CustomField::singleton();
+      switch ($apiRequest['params']['field_name']) {
+        case 'kava_custom_apb':
+          $apiRequest['params']['field_name'] = $cf->getApiFieldName('contact_apotheekuitbating', 'APB_nummer');
+          break;
+        case 'kava_custom_barcode':
+          $apiRequest['params']['field_name'] = $cf->getApiFieldName('contact_extra', 'Barcode');
+          break;
+      }
 
-    // require_once __DIR__ . '/../../../be.kava.generic/CRM/KavaGeneric/CustomField.php';
-    // $cf = CRM_KavaGeneric_CustomField::singleton();
-    // if($apiRequest['params']['field_name'] == 'kava_custom_apb') // || kava_custom_barcode
-    // $cf->getApiFieldName('contact_apotheekuitbating', 'APB_nummer')
-    // $cf->getApiFieldName('contact_extra', 'Barcode')
-    // ... see link for example
+      $apiRequest['action'] = 'getlist';
+      $apiRequest['function'] = [$this, 'getCustomContactList'];
+    }
 
     return $apiRequest;
+  }
+
+  public function getCustomContactList($params) {
+
+    $res = civicrm_api3('Contact', 'get', [
+      $params['field_name'] => $params['name'],
+      'is_deleted'          => FALSE,
+      'sequential'          => TRUE,
+      'return'              => ['id', 'sort_name', $params['field_name']],
+    ]);
+
+    foreach ($res['values'] as $idx => $value) {
+      $res['values'][$idx]['data'] = $value['sort_name'] . " ({$value[$params['field_name']]})";
+    }
+
+    return $res;
   }
 
   public function toApiOutput($apiRequest, $result) {

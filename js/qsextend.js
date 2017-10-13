@@ -1,19 +1,27 @@
-/* Quick Search Extension JS */
+/* KAVA Quick Search Extension JS */
 
 CRM.$(function ($) {
 
-    var $apb = $('<li><label class="crm-quickSearchField"><input type="radio" data-tablename="cc" value="kava_custom_apb" name="quickSearchField"> APB-nummer</label></li>');
-    var $barcode = $('<li><label class="crm-quickSearchField"><input type="radio" data-tablename="cc" value="kava_custom_barcode" name="quickSearchField"> Barcode</label></li>');
+    // An ugly way to add new options to the quicksearch JS menu
+    var $contactIdMenuItem = $('#root-menu-div .crm-quickSearchField').eq(1).closest('li');
 
-    $('#civicrm-menu').ready(function () {
-        // Add custom APB and barcode fields to the lookup dropdown
-        var $ul = $('#civicrm-menu').find('#crm-qsearch ul');
-        $ul.append($apb);
-        $ul.append($barcode);
+    var $apb = $('<li><div class="menu-item"><label class="crm-quickSearchField"><input type="radio" data-tablename="cc" value="kava_custom_apb" name="quickSearchField"> APB-nummer</label></div></li>');
+    var $barcode = $('<li><div class="menu-item"><label class="crm-quickSearchField"><input type="radio" data-tablename="cc" value="kava_custom_barcode" name="quickSearchField"> Barcode</label></div></li>');
 
-        // TODO The code above doesn't work.
-        // TODO Rebuilding the entire menu sort of works, but this breaks submenus and is inefficient.
-        // TODO Is there another way to add menu items without having to override navigation.js.tpl?
-        // $('#civicrm-menu').menuBar({arrowSrc: CRM.config.resourceBase + 'packages/jquery/css/images/arrow.png'});
+    $apb.insertAfter($contactIdMenuItem);
+    $barcode.insertAfter($contactIdMenuItem);
+
+    // Add hover effect on mouseover
+    $apb.add($barcode).mouseover(function (ev) {
+        $(this).addClass('active');
+    }).mouseout(function (ev) {
+        $(this).removeClass('active');
+    });
+
+    // Prevent form submission if one of our options is selected: advanced search does not recognize these params
+    $('#id_search_block').submit(function (ev) {
+        if (['kava_custom_apb', 'kava_custom_barcode'].indexOf($('input[name=quickSearchField]:checked').val()) > -1) {
+            ev.preventDefault();
+        }
     });
 });

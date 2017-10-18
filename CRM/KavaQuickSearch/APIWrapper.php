@@ -26,6 +26,7 @@ class CRM_KavaQuickSearch_APIWrapper implements API_Wrapper {
       switch ($apiRequest['params']['field_name']) {
         case 'kava_custom_apb':
           $apiRequest['params']['field_name'] = $cf->getApiFieldName('contact_apotheekuitbating', 'APB_nummer');
+          $apiRequest['params']['extra_field_name'] = $cf->getApiFieldName('contact_apotheekuitbating', 'Overname');
           break;
         case 'kava_custom_barcode':
           $apiRequest['params']['field_name'] = $cf->getApiFieldName('contact_extra', 'Barcode');
@@ -41,15 +42,26 @@ class CRM_KavaQuickSearch_APIWrapper implements API_Wrapper {
 
   public function getCustomContactList($params) {
 
+    $returnFields = ['id', 'sort_name', $params['field_name']];
+    if (isset($params['extra_field_name'])) {
+      $returnFields[] = $params['extra_field_name'];
+    }
+
     $res = civicrm_api3('Contact', 'get', [
       $params['field_name'] => $params['name'],
       'is_deleted'          => FALSE,
       'sequential'          => TRUE,
-      'return'              => ['id', 'sort_name', $params['field_name']],
+      'return'              => $returnFields,
     ]);
 
     foreach ($res['values'] as $idx => $value) {
-      $res['values'][$idx]['data'] = $value['sort_name'] . " ({$value[$params['field_name']]})";
+      $displayName = $value['sort_name'] . " (" . $value[$params['field_name']];
+      if (isset($params['extra_field_name']) && isset($value[$params['extra_field_name']])) {
+        $displayName .= "-" . $value[$params['extra_field_name']];
+      }
+      $displayName .= ")";
+
+      $res['values'][$idx]['data'] = $displayName;
     }
 
     return $res;

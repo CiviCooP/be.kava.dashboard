@@ -25,8 +25,12 @@ class CRM_KavaQuickSearch_APIWrapper implements API_Wrapper {
       $cf = CRM_KavaGeneric_CustomField::singleton();
       switch ($apiRequest['params']['field_name']) {
         case 'kava_custom_apb':
-          $apiRequest['params']['field_name'] = $cf->getApiFieldName('contact_apotheekuitbating', 'APB_nummer');
-          $apiRequest['params']['extra_field_name'] = $cf->getApiFieldName('contact_apotheekuitbating', 'Overname');
+          $apbNrFieldName = $cf->getApiFieldName('contact_apotheekuitbating', 'APB_nummer');
+          $overnameFieldName = $cf->getApiFieldName('contact_apotheekuitbating', 'Overname');
+
+          $apiRequest['params']['field_name'] = $apbNrFieldName;
+          $apiRequest['params']['extra_field_name'] = $overnameFieldName;
+          $apiRequest['params']['sort'] = $overnameFieldName . ' DESC';
           break;
         case 'kava_custom_barcode':
           $apiRequest['params']['field_name'] = $cf->getApiFieldName('contact_extra', 'Barcode');
@@ -43,8 +47,12 @@ class CRM_KavaQuickSearch_APIWrapper implements API_Wrapper {
   public function getCustomContactList($params) {
 
     $returnFields = ['id', 'sort_name', $params['field_name']];
+    $options = [];
     if (isset($params['extra_field_name'])) {
       $returnFields[] = $params['extra_field_name'];
+    }
+    if (isset($params['sort'])) {
+      $options['sort'] = $params['sort'];
     }
 
     $res = civicrm_api3('Contact', 'get', [
@@ -52,12 +60,13 @@ class CRM_KavaQuickSearch_APIWrapper implements API_Wrapper {
       'is_deleted'          => FALSE,
       'sequential'          => TRUE,
       'return'              => $returnFields,
+      'options'             => $options,
     ]);
 
     foreach ($res['values'] as $idx => $value) {
       $displayName = $value['sort_name'] . " (" . $value[$params['field_name']];
       if (isset($params['extra_field_name']) && isset($value[$params['extra_field_name']])) {
-        $displayName .= "-" . $value[$params['extra_field_name']];
+        $displayName .= "." . $value[$params['extra_field_name']];
       }
       $displayName .= ")";
 

@@ -1,11 +1,9 @@
-<form action="" name="dashboard_qsdashlet_block" id="qsdashlet-form" method="post">
-  <input type="text" class="form-text" id="qsdashlet-id" placeholder="{ts}Contact ID{/ts}" data-group="1">
-  <input type="text" class="form-text" id="qsdashlet-postcode" placeholder="{ts}ZIP / Postal Code{/ts}" data-group="2">
-  <input type="text" class="form-text" id="qsdashlet-streetno" placeholder="{ts}Street Number{/ts}" data-group="2">
-  <input type="text" class="form-text" id="qsdashlet-name" placeholder="{ts}Last Name{/ts}" data-group="3">
-  <input type="text" class="form-text" id="qsdashlet-city" placeholder="{ts}City{/ts}" data-group="3">
-  <input type="text" class="form-text" id="qsdashlet-communic" placeholder="{ts}Tel/Email{/ts}" data-group="4">
+<h3 class="kavadashboard-header">Zoek op naam, email of APB-nummer</h3>
+
+<form action="" name="kavadashboard-search-form" id="kavadashboard-search-form" method="post" data-apb-field-name="{$apbFieldName}" data-overname-field-name="{$overnameFieldName}">
+  <input type="text" class="form-text" id="kavadashboard-search-name" placeholder="{ts}Name/Email{/ts}" data-group="1">
+  <input type="text" class="form-text" id="kavadashboard-search-apb" placeholder="{ts}APB-nummer{/ts}" data-group="2">
 </form>
 
-<div id="qsdashlet-spinner"></div>
-<div id="qsdashlet-results"></div>
+<div id="kavadashboard-search-spinner"></div>
+<div id="kavadashboard-search-results"></div>

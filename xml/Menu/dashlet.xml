@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<menu>
+    <item>
+        <path>civicrm/dashlet/kava_search</path>
+        <page_callback>CRM_KavaDashboard_Page_SearchDashlet</page_callback>
+        <title>SearchDashlet</title>
+        <access_arguments>access CiviCRM</access_arguments>
+    </item>
+</menu>

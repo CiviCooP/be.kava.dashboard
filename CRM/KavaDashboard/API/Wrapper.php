@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Class CRM_KavaQuickSearch_APIWrapper.
+ * Class CRM_KavaDashboard_API_Wrapper.
  * API wrapper to handle quick searches for custom fields.
  *
  * For information about how this hook works, see
@@ -13,7 +13,7 @@
  * @package be.kava.quicksearch
  * @license AGPL-3.0
  */
-class CRM_KavaQuickSearch_APIWrapper implements API_Wrapper {
+class CRM_KavaDashboard_API_Wrapper implements API_Wrapper {
 
   public function fromApiInput($apiRequest) {
 

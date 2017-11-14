@@ -1,24 +1,25 @@
 <?xml version="1.0"?>
-<extension key="be.kava.quicksearch" type="module">
-  <file>kavaquicksearch</file>
-  <name>KAVA Quick Search Extension</name>
-  <description>Extends the default quick search field to support searching within custom fields</description>
+<extension key="be.kava.dashboard" type="module">
+  <file>kavadashboard</file>
+  <name>KAVA Dashboard Extension</name>
+  <description>Provides custom dashboard widgets and extends the quick search field</description>
   <license>AGPL-3.0</license>
   <maintainer>
     <author>Kevin Levie</author>
     <email>kevin.levie@civicoop.org</email>
   </maintainer>
   <urls>
-    <url desc="Main Extension Page">https://github.com/CiviCooP/be.kava.quicksearch</url>
+    <url desc="Main Extension Page">https://github.com/CiviCooP/be.kava.dashboard</url>
     <url desc="Licensing">http://www.gnu.org/licenses/agpl-3.0.html</url>
   </urls>
-  <releaseDate>2017-10-27</releaseDate>
-  <version>1.2</version>
+  <releaseDate>2017-11-14</releaseDate>
+  <version>1.3</version>
   <develStage>beta</develStage>
   <compatibility>
     <ver>4.6</ver>
+    <ver>4.7</ver>
   </compatibility>
   <civix>
-    <namespace>CRM/KavaQuickSearch</namespace>
+    <namespace>CRM/KavaDashboard</namespace>
   </civix>
 </extension>

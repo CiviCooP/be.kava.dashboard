@@ -1,4 +1,4 @@
-Package: be.kava.quicksearch
+Package: be.kava.dashboard
 Copyright (C) 2017, Kevin Levie <kevin.levie@civicoop.org>
 Licensed under the GNU Affero Public License 3.0 (below).
 

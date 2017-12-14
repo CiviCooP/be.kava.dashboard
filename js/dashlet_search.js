@@ -130,9 +130,11 @@ var KavaDashboardSearchDashlet = function ($) {
 
         } else if (name.length > 0) {
 
-            // Get both organisations and persons and concatenate the two result arrays
+            // Get both organisations and persons by first/last name and concatenate the result arrays
+            // Should be updated if OR queries for contacts are supported in future API versions
             var getByOrganizationName = CRM.api3('Contact', 'get', {
                 organization_name: {'LIKE': '%' + name + '%'},
+                contact_type: 'Organization',
                 return: that.returnFields,
                 sequential: 1
             });
@@ -141,28 +143,51 @@ var KavaDashboardSearchDashlet = function ($) {
                 return: that.returnFields,
                 sequential: 1
             });
+            var getByFirstName = CRM.api3('Contact', 'get', {
+                first_name: {'LIKE': '%' + name + '%'},
+                return: that.returnFields,
+                sequential: 1
+            });
 
-            $.when(getByOrganizationName, getByLastName)
-                .done(function (data1, data2) {
-                    console.log(data1, data2);
-                    if (data1[0].is_error) {
-                        that.showError(data1[0].error_message);
-                    } else if (data2[0].is_error) {
-                        that.showError(data2[0].error_message);
-                    } else {
-                        var data = data1[0].values
-                            .concat(data2[0].values)
-                            .sort(function(a, b) {
-                                return a.sort_name.localeCompare(b.sort_name);
-                            });
-                        that.showResults(data);
+            $.when(getByOrganizationName, getByLastName, getByFirstName)
+                .done(function (data1, data2, data3) {
+
+                    var results = [data1, data2, data3];
+                    var records = [], ret = [], seen = [];
+                    var isValid = true;
+
+                    // Show errors if there are any, and combine all records
+                    $.each(results, function (index, result) {
+                        if (result[0].is_error) {
+                            that.showError(result[0].error_message);
+                            isValid = false;
+                        } else {
+                            records = records.concat(result[0].values);
+                        }
+                    });
+
+                    if (isValid === false) {
+                        return;
                     }
+
+                    // Remove duplicate records and sort
+                    $.each(records, function (index, record) {
+                        if (seen.indexOf(record.id) > -1) {
+                            return;
+                        }
+                        ret.push(record);
+                        seen.push(record.id);
+                    });
+
+                    ret = ret.sort(function (a, b) {
+                        return a.sort_name.localeCompare(b.sort_name);
+                    });
+
+                    that.showResults(ret);
                 })
                 .fail(function () {
                     that.showError();
                 });
-        } else {
-            that.showError();
         }
     }
 

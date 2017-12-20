@@ -27,22 +27,6 @@ function kavadashboard_civicrm_apiWrappers(&$wrappers, $apiRequest) {
   }
 }
 
-/* function kavadashboard_civicrm_dashboard($contactID, &$contentPlacement) {
-  // REPLACE Activity Listing with custom content
-  $contentPlacement = 3;
-  $content = array(
-    'Custom Content' => "Here is some custom content: $contactID",
-    'Custom Table' => "
-      <table>
-      <tr><th>Contact Name</th><th>Date</th></tr>
-      <tr><td>Foo</td><td>Bar</td></tr>
-      <tr><td>Goo</td><td>Tar</td></tr>
-      </table>",
-  );
-  return $content;
-} */
-
-
 /** Default Civix hooks follow **/
 
 function kavadashboard_civicrm_enable() {

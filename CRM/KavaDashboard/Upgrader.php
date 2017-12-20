@@ -7,7 +7,8 @@
 class CRM_KavaDashboard_Upgrader extends CRM_KavaDashboard_Upgrader_Base {
 
   protected static $dashlets = [
-    'kava_search' => 'Snelzoeken',
+    'kava_search' => 'KAVA: Snelzoeken',
+    'kava_links' => 'KAVA: Handige links',
   ];
 
   /**
@@ -17,9 +18,11 @@ class CRM_KavaDashboard_Upgrader extends CRM_KavaDashboard_Upgrader_Base {
   public function onEnable() {
 
     $existing_dashlets = $this->getDashlets();
+    $weight = 100;
 
     foreach (static::$dashlets as $dashlet_key => $dashlet_label) {
       if (!in_array($dashlet_key, $existing_dashlets)) {
+        $weight++;
         civicrm_api3('Dashboard', 'create', [
           'name'           => $dashlet_key,
           'label'          => $dashlet_label,
@@ -28,7 +31,7 @@ class CRM_KavaDashboard_Upgrader extends CRM_KavaDashboard_Upgrader_Base {
           'permission'     => 'access CiviCRM',
           'is_fullscreen'  => 0,
           'is_active'      => 1,
-          'weight'         => 101,
+          'weight'         => $weight,
         ]);
       }
     }

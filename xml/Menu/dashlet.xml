@@ -6,4 +6,10 @@
         <title>SearchDashlet</title>
         <access_arguments>access CiviCRM</access_arguments>
     </item>
+    <item>
+        <path>civicrm/dashlet/kava_links</path>
+        <page_callback>CRM_KavaDashboard_Page_LinksDashlet</page_callback>
+        <title>LinksDashlet</title>
+        <access_arguments>access CiviCRM</access_arguments>
+    </item>
 </menu>
